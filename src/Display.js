@@ -16,7 +16,10 @@ var FORMATTED_ADDRESS = '';
 
 
 // TODO
-// Format how the information is displayed
+// Fix the code for the weather-info div. Very inefficient, must be an easier way
+// // There is padding on the p tags that looks bad at a small enough screen size. Shouldn't be hardcoded like that
+// // Must be a better way of making the tags hidden without having all those ternary ifs
+
 // Maybe add 5 day forecast?
 // Add google places autocomplete to input
 
@@ -83,7 +86,7 @@ class Display extends React.Component {
     .then(weather => {
       this.setState({
         summary: weather.summary,
-        temp: weather.temperature
+        temp: Math.round(weather.temperature)
       });
     });
   }
@@ -108,9 +111,17 @@ class Display extends React.Component {
         </div>
 
         <div className="weather-info">
-          <p className="weather-for">{FORMATTED_ADDRESS}</p>
-          <p className="current-weather">Weather: {this.state.summary}</p>
-          <p className="current-temperature">Temperature: {this.state.selectedTempUnit === 'c' ? this.state.temp : (this.state.temp * 1.8) + 32}</p>
+          <p className="weather-for">{FORMATTED_ADDRESS ? FORMATTED_ADDRESS : 'Where do you need the weather for?'}</p>
+          { this.state.temp
+            ? <p className="current-weather">Weather: {this.state.summary}</p>
+            : <p className="hidden-input-figure-out-how-to-fix">Weather:</p>
+          }
+          { this.state.temp
+            ? <p className="current-temperature">Temperature: {this.state.selectedTempUnit === 'c' ? this.state.temp : Math.round((this.state.temp * 1.8) + 32)}
+                                                            {this.state.temp ? this.state.selectedTempUnit === 'c' ? ' °C' : ' °F' : null}{/*If the temperature exists, then check if it is C or F*/}
+            </p>
+            : <p className="hidden-input-figure-out-how-to-fix">Temperature:</p>
+          }
         </div>
       </main>
     );
