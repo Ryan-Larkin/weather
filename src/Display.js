@@ -14,7 +14,6 @@ var FORMATTED_ADDRESS = '';
 
 
 // TODO
-// Figure out how to use radio buttons and state to switch how temperature is displayed
 // Format how the information is displayed
 // Maybe add 5 day forecast?
 
@@ -23,25 +22,16 @@ class Display extends React.Component {
     super();
 
     this.state = {
-      selectedTempUnit: 'c',
-      temp: '',
-      summary: ''
+      selectedTempUnit: 'c', // default display in celsius
+      temp: '', // temperature of the location
+      summary: '' // summary of weather conditions for location
     };
   }
 
   _handleUnitChange = (event) => {
-    let tempUnit = event.target.value;
-
     this.setState({
-      selectedTempUnit: tempUnit
+      selectedTempUnit: event.target.value
     });
-
-    // if (tempUnit === 'c') {
-    //
-    // }
-    // else {
-    //
-    // }
   }
 
   _handleTyping = (e) => {
@@ -49,7 +39,7 @@ class Display extends React.Component {
       this.setState({ error: null })
     }
     if (e.keyCode===ENTER) {
-      this._handleGetWeather()
+      this._handleGetWeather();
     }
   }
 
@@ -57,17 +47,16 @@ class Display extends React.Component {
     let url = `${GOOGLE_MAPS_API_URL}?address=${cityName}&key=${GOOGLE_MAPS_API_KEY}`;
 
     return (
-      fetch(url) // Returns a promise for a Response
-      .then(response => response.json()) // Returns a promise for the parsed JSON
+      fetch(url)
+      .then(response => response.json())
       .then(data => {
           FORMATTED_ADDRESS = data.results[0]['formatted_address'];
           return data.results[0].geometry.location;
-      }) // Transform the response to only return what we need
+      })
     );
   }
 
   _getCurrentWeather = (coords) => {
-    // Template string again! I hope you can see how nicer this is :)
     let url = `${CORS_PROXY}${DARKSKY_API_URL}${DARKSKY_API_KEY}/${coords.lat},${coords.lng}?units=si&exclude=minutely,hourly,daily,alerts,flags`;
 
     return (
@@ -81,7 +70,6 @@ class Display extends React.Component {
     this._getCoordinatesForCity(this.refs.cityInput.value)
     .then(this._getCurrentWeather)
     .then(weather => {
-      console.log(weather)
       this.setState({
         summary: weather.summary,
         temp: weather.temperature
@@ -111,7 +99,7 @@ class Display extends React.Component {
         <div className="weather-info">
           <p className="weather-for">{FORMATTED_ADDRESS}</p>
           <p className="current-weather">Weather: {this.state.summary}</p>
-          <p className="current-temperature">Temperature: {this.state.temp}</p>
+          <p className="current-temperature">Temperature: {this.state.selectedTempUnit === 'c' ? this.state.temp : (this.state.temp * 1.8) + 32}</p>
         </div>
       </main>
     );
