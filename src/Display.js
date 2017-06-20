@@ -14,11 +14,12 @@ const GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBdpDOpjoue2bvABv9xSdYY6SDdwvtKM30';
 var FORMATTED_ADDRESS = '';
 
-
 // TODO
-// Fix the code for the weather-info div. Very inefficient, must be an easier way
-// // There is padding on the p tags that looks bad at a small enough screen size. Shouldn't be hardcoded like that
-// // Must be a better way of making the tags hidden without having all those ternary ifs
+// Figure out how to fix the information display. Currently it is all centered.
+// Need to centre the initial message but have the actual info be left-aligned
+// // Above is working for now but max width of the display is 327px.
+// // There must be an easier or cleaner way of doing this
+// // Also any address that goes past 2 lines isn't left-aligned anymore
 
 // Maybe add 5 day forecast?
 // Add google places autocomplete to input
@@ -112,16 +113,9 @@ class Display extends React.Component {
 
         <div className="weather-info">
           <p className="weather-for">{FORMATTED_ADDRESS ? FORMATTED_ADDRESS : 'Where do you need the weather for?'}</p>
-          { this.state.temp
-            ? <p className="current-weather">Weather: {this.state.summary}</p>
-            : <p className="hidden-input-figure-out-how-to-fix">Weather:</p>
-          }
-          { this.state.temp
-            ? <p className="current-temperature">Temperature: {this.state.selectedTempUnit === 'c' ? this.state.temp : Math.round((this.state.temp * 1.8) + 32)}
-                                                            {this.state.temp ? this.state.selectedTempUnit === 'c' ? ' °C' : ' °F' : null}{/*If the temperature exists, then check if it is C or F*/}
-            </p>
-            : <p className="hidden-input-figure-out-how-to-fix">Temperature:</p>
-          }
+          <p className="current-weather" style={{visibility: this.state.temp ? 'visible' : 'hidden'}}>Weather: {this.state.summary}</p>
+          <p className="current-temperature" style={{visibility: this.state.temp ? 'visible' : 'hidden'}}> Temperature: {this.state.selectedTempUnit === 'c' ? this.state.temp : Math.round((this.state.temp * 1.8) + 32)}
+            {this.state.temp ? this.state.selectedTempUnit === 'c' ? ' °C' : ' °F' : null}{/*If the temperature exists, then check if it is C or F*/}</p>
         </div>
       </main>
     );

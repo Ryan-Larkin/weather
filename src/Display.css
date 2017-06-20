@@ -29,7 +29,7 @@ body {
 .display {
     background-color: rgba(50,50,50, 0.9);
     border-radius:5px;
-    max-width:340px;
+    max-width:327px;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -52,7 +52,7 @@ body {
     color:#eee;
     font-weight:bold;
     width:100%;
-    padding-left:45px;
+    padding:0 25px 0px 25px;
 }
 
 .weather-info > p {
@@ -96,13 +96,4 @@ body {
 .temperature-units > p {
     padding:0;
     margin:0;
-}
-
-.current-weather, .current-temperature {
-  display:flex;
-  justify-content: flex-start;
-}
-
-.hidden-input-figure-out-how-to-fix {
-  visibility:hidden;
 }
